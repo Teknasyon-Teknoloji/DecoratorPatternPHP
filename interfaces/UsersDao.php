@@ -7,7 +7,10 @@
  */
 
 /**
- * Description of newPHPClass
+ * Description of UsersDao
+ * 
+ * A basic interface that defines what a class is allowed to do as
+ * it implements this interface.
  *
  * @author Ali
  */

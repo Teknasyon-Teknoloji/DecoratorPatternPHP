@@ -12,6 +12,15 @@ include 'dao/CacheUsersDao.php';
 
 /**
  * Description of DaoFactory
+ * 
+ * We need a singleton class that holds the connection as one for each 
+ * individual request, since we are to access same database and redis clients.
+ * 
+ * You will be available to access all methods of any interface that are defined
+ * within the bounds of any interface by having an instance of them. 
+ * 
+ * Make sure that each your database and cache client classes implements the 
+ * same interface.
  *
  * @author Ali
  */
@@ -31,10 +40,19 @@ class DaoFactory {
         return self::$inst;
     }
 
-    public function getUserList($conn, $redisConn) {
+    /**
+     * Returns an object that has been decorated via Database and cache clients.
+     * {@link DbUsersDao} is responsible of database queries, {@link CacheUsersDao}
+     * caches the stream on Redis server. Keep in mind that, first initialized 
+     * class has to be connected to a persistent storage for persistency.
+     * 
+     * @param type $conn
+     * @param type $redisConn
+     * @return \CacheUsersDao
+     */
+    public function getUsersDao($conn, $redisConn) {
         $usersDao = new DbUsersDao($conn);
         $usersDao = new CacheUsersDao($usersDao, $redisConn);
         return $usersDao;
     }
-
 }
